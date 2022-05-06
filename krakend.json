@@ -1,0 +1,76 @@
+{
+  "$schema": "https://www.krakend.io/schema/v3.json",
+  "version": 3,
+  "extra_config": {
+    "telemetry/logging": {
+      "level": "DEBUG",
+      "prefix": "[KRAKEND]",
+      "syslog": false,
+      "stdout": true,
+      "format": "default"
+    },
+    "github_com/devopsfaith/krakend-metrics": {
+      "collection_time": "60s",
+      "proxy_disabled": false,
+      "router_disabled": false,
+      "backend_disabled": false,
+      "endpoint_disabled": false,
+      "listen_address": ":8090"
+    },
+    "router": {
+      "logger_skip_paths": [
+        "/__health",
+        "/__stats"
+      ]
+    },
+    "plugin/http-server": {
+      "name": ["wildcard", "random"],
+      "wildcard": {
+        "endpoints": {
+          "/__wildcard/foo": ["/foo"]
+        }
+      }
+    }
+  },
+  "plugin": {
+    "pattern": ".so",
+    "folder": "/opt/krakend/plugins/"
+  },
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "json",
+  "name": "plugin-test-microgateway",
+  "port": 8080,
+  "endpoints": [
+    {
+      "endpoint": "/abc",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+          {
+            "method": "GET",
+            "host": ["https://jsonplaceholder.typicode.com"],
+            "url_pattern": "/users/1"
+          }
+      ]
+      },
+      {
+        "endpoint": "/__wildcard/foo",
+        "input_headers": [ "X-Krakend-Wildcard" ],
+        "method": "GET",
+        "output_encoding": "json",
+        "backend": [
+          {
+            "method": "GET",
+            "host": ["https://jsonplaceholder.typicode.com"],
+            "url_pattern": "/posts/1",
+            "extra_config": {
+              "plugin/http-client": {
+                  "name": "wildcard"
+              }
+            }
+          }
+        ]
+    }
+  ]
+}

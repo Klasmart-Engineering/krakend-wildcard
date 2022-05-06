@@ -1,4 +1,4 @@
-# Microgateway Custom Plugin Template
+# Custom Wildcard Plugin
 
 This repository contains a template project for creating custom KrakenD plugins. _(To be injected into Microgateway deployments)_
 
