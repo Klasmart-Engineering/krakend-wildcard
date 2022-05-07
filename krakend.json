@@ -63,7 +63,7 @@
           {
             "method": "GET",
             "host": ["https://jsonplaceholder.typicode.com"],
-            "url_pattern": "/posts/1",
+            "url_pattern": "",
             "extra_config": {
               "plugin/http-client": {
                   "name": "wildcard"
